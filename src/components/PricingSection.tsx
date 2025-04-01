@@ -6,10 +6,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 
 const PricingCard = ({ 
   title,
   price,
+  period = "mês",
   features,
   buttonText,
   isPrimary = false,
@@ -24,32 +26,32 @@ const PricingCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.5, delay: 0.2 * index }}
-      className={`rounded-xl overflow-hidden ${
+      className={`h-full rounded-xl overflow-hidden ${
         isPrimary 
-          ? 'bg-uni-blue text-white' 
+          ? 'bg-uni-blue text-white shadow-xl' 
           : isCustom
             ? 'bg-white border border-dashed border-uni-blue'
             : 'bg-white border border-uni-lightGray'
-      } shadow-lg relative card-hover`}
+      } relative card-hover`}
     >
       {recommended && (
         <div className="absolute top-0 left-0 right-0 bg-yellow-400 text-uni-dark font-medium py-1 text-center text-sm">
           Recomendado
         </div>
       )}
-      <div className="p-8">
+      <div className="p-8 flex flex-col h-full">
         <h3 className="text-2xl font-bold mb-4">{title}</h3>
         <div className="mb-6">
           {price ? (
             <>
               <span className="text-4xl font-bold">{price}</span>
-              <span className="text-lg opacity-80">/mês</span>
+              <span className="text-lg opacity-80">/{period}</span>
             </>
           ) : (
             <span className="text-lg opacity-80">Personalizado</span>
           )}
         </div>
-        <ul className="space-y-4 mb-8">
+        <ul className="space-y-4 mb-8 flex-grow">
           {features.map((feature: string, i: number) => (
             <li key={i} className="flex items-start">
               <Check className={`w-5 h-5 mr-2 ${isPrimary ? 'text-white' : 'text-uni-blue'} flex-shrink-0 mt-0.5`} />
@@ -58,7 +60,7 @@ const PricingCard = ({
           ))}
         </ul>
         <button 
-          className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
+          className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-300 ${
             isPrimary 
               ? 'bg-white text-uni-blue hover:bg-uni-lightGray' 
               : isCustom
@@ -120,20 +122,22 @@ const ContactForm = ({ open, onOpenChange }: { open: boolean; onOpenChange: (ope
 const PricingSection = () => {
   const [contactOpen, setContactOpen] = useState(false);
   
-  const freeFeatures = [
-    "Até 1 turma ativa",
-    "Até 30 alunos",
-    "Limite de 20 exercícios",
-    "Ambiente de execução básico"
+  const monthlyFeatures = [
+    "Até 5 turmas ativas",
+    "Até 150 alunos",
+    "Exercícios ilimitados",
+    "Ambiente de execução básico",
+    "Suporte por email"
   ];
   
-  const premiumFeatures = [
+  const annualFeatures = [
     "Turmas ilimitadas",
     "Alunos ilimitados",
     "Exercícios ilimitados",
     "Ambiente de execução avançado",
     "Suporte prioritário",
-    "Estatísticas detalhadas"
+    "Estatísticas detalhadas",
+    "2 meses grátis"
   ];
   
   const customFeatures = [
@@ -164,17 +168,19 @@ const PricingSection = () => {
         
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <PricingCard 
-            title="Free"
-            price="R$0"
-            features={freeFeatures}
-            buttonText="Começar Grátis"
+            title="Mensal"
+            price="R$49"
+            period="mês"
+            features={monthlyFeatures}
+            buttonText="Assinar Agora"
             index={0}
           />
           
           <PricingCard 
-            title="Premium"
-            price="R$49"
-            features={premiumFeatures}
+            title="Anual"
+            price="R$39"
+            period="mês"
+            features={annualFeatures}
             buttonText="Assinar Agora"
             isPrimary={true}
             recommended={true}

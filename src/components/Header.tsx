@@ -10,6 +10,9 @@ const Header = () => {
   
   const headerOpacity = useTransform(scrollY, [0, 50], [0, 1]);
   const headerScale = useTransform(scrollY, [0, 50], [0.95, 1]);
+  const headerBgOpacity = useTransform(scrollY, [0, 50], [0, 1]);
+  const headerBorderRadius = useTransform(scrollY, [0, 50], ["0px", "1rem"]);
+  const headerMargin = useTransform(scrollY, [0, 50], ["0px", "0.5rem"]);
   const logoScale = useTransform(scrollY, [0, 50], [1, 0.8]);
   const textOpacity = useTransform(scrollY, [0, 50], [1, 0]);
   
@@ -27,14 +30,17 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="fixed top-4 left-0 right-0 z-50 px-4">
+    <header className="fixed top-0 left-0 right-0 z-50 px-0 md:px-4">
       {/* Header Container */}
       <motion.div 
-        className={`mx-auto max-w-7xl ${scrolled || isMobile ? 'bg-white/90 shadow-lg backdrop-blur-md' : 'bg-transparent'} 
-          rounded-2xl px-6 py-4 transition-all duration-300 flex items-center justify-between`}
+        className={`mx-auto max-w-7xl transition-all duration-300 flex items-center justify-between`}
         style={{ 
-          opacity: isMobile ? 1 : headerOpacity,
-          scale: isMobile ? 1 : headerScale,
+          backgroundColor: isMobile ? "white" : scrolled ? "white" : "transparent",
+          boxShadow: scrolled || isMobile ? "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)" : "none",
+          backdropFilter: scrolled || isMobile ? "blur(8px)" : "none",
+          borderRadius: isMobile ? "0" : headerBorderRadius,
+          marginTop: headerMargin,
+          padding: isMobile ? "1rem" : scrolled ? "1rem 1.5rem" : "1.5rem",
         }}
       >
         {/* Logo */}

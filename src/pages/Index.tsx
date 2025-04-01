@@ -20,10 +20,14 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <Header />
       <main>
-        <div className="pt-32 bg-white">
+        <div className="pt-20 bg-white">
           <div className="container-custom">
-            <HeroSection />
-            <DemoSection />
+            <div className="flex flex-col items-center">
+              <HeroSection />
+              <div className="mt-8 w-full max-w-6xl mx-auto">
+                <DemoSection />
+              </div>
+            </div>
           </div>
         </div>
         <FeaturesSection />

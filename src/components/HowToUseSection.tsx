@@ -110,12 +110,10 @@ const HowToUseSection = () => {
                 stroke="#3B82F6" 
                 strokeWidth="2" 
                 strokeDasharray="10 5"
-                pathLength="1"
                 strokeDashoffset="0"
                 className="transition-all duration-300"
                 style={{ 
                   strokeDashoffset: `calc(1 - ${lineHeight.get()})`,
-                  pathLength: 1 
                 }}
               />
             </svg>
