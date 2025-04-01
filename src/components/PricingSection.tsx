@@ -1,7 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const PricingCard = ({ 
   title,
@@ -10,6 +14,8 @@ const PricingCard = ({
   buttonText,
   isPrimary = false,
   recommended = false,
+  isCustom = false,
+  onContactClick,
   index
 }: any) => {
   return (
@@ -21,7 +27,9 @@ const PricingCard = ({
       className={`rounded-xl overflow-hidden ${
         isPrimary 
           ? 'bg-uni-blue text-white' 
-          : 'bg-white border border-uni-lightGray'
+          : isCustom
+            ? 'bg-white border border-dashed border-uni-blue'
+            : 'bg-white border border-uni-lightGray'
       } shadow-lg relative card-hover`}
     >
       {recommended && (
@@ -32,8 +40,14 @@ const PricingCard = ({
       <div className="p-8">
         <h3 className="text-2xl font-bold mb-4">{title}</h3>
         <div className="mb-6">
-          <span className="text-4xl font-bold">{price}</span>
-          <span className="text-lg opacity-80">/mês</span>
+          {price ? (
+            <>
+              <span className="text-4xl font-bold">{price}</span>
+              <span className="text-lg opacity-80">/mês</span>
+            </>
+          ) : (
+            <span className="text-lg opacity-80">Personalizado</span>
+          )}
         </div>
         <ul className="space-y-4 mb-8">
           {features.map((feature: string, i: number) => (
@@ -47,8 +61,11 @@ const PricingCard = ({
           className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
             isPrimary 
               ? 'bg-white text-uni-blue hover:bg-uni-lightGray' 
-              : 'border border-uni-blue text-uni-blue hover:bg-uni-blue hover:text-white'
+              : isCustom
+                ? 'bg-uni-blue text-white hover:bg-uni-darkBlue'
+                : 'border border-uni-blue text-uni-blue hover:bg-uni-blue hover:text-white'
           }`}
+          onClick={isCustom ? onContactClick : undefined}
         >
           {buttonText}
         </button>
@@ -57,56 +74,52 @@ const PricingCard = ({
   );
 };
 
-const ContactForm = () => {
+const ContactForm = ({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.7, delay: 0.4 }}
-      className="max-w-2xl mx-auto mt-16 p-8 bg-white rounded-xl shadow-lg"
-    >
-      <h3 className="text-2xl font-bold mb-6 text-center">Precisa de um plano personalizado?</h3>
-      <form className="space-y-6">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium mb-2 text-uni-gray">Nome</label>
-          <input 
-            type="text" 
-            id="name" 
-            className="w-full px-4 py-3 border border-uni-lightGray rounded-lg focus:outline-none focus:ring-2 focus:ring-uni-blue"
-            placeholder="Seu nome"
-          />
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold">Entre em contato</DialogTitle>
+          <DialogDescription>
+            Preencha o formulário abaixo para receber uma proposta personalizada.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="name" className="text-right">
+              Nome
+            </Label>
+            <Input id="name" placeholder="Seu nome" className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="email" className="text-right">
+              Email
+            </Label>
+            <Input id="email" placeholder="seu@email.com" className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="message" className="text-right">
+              Mensagem
+            </Label>
+            <textarea 
+              id="message" 
+              rows={4} 
+              className="col-span-3 flex h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              placeholder="Descreva suas necessidades"
+            ></textarea>
+          </div>
         </div>
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-2 text-uni-gray">Email</label>
-          <input 
-            type="email" 
-            id="email" 
-            className="w-full px-4 py-3 border border-uni-lightGray rounded-lg focus:outline-none focus:ring-2 focus:ring-uni-blue"
-            placeholder="seu@email.com"
-          />
-        </div>
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium mb-2 text-uni-gray">Mensagem</label>
-          <textarea 
-            id="message" 
-            rows={4} 
-            className="w-full px-4 py-3 border border-uni-lightGray rounded-lg focus:outline-none focus:ring-2 focus:ring-uni-blue"
-            placeholder="Descreva suas necessidades"
-          ></textarea>
-        </div>
-        <button 
-          type="submit" 
-          className="w-full bg-uni-blue hover:bg-uni-darkBlue text-white font-medium px-6 py-3 rounded-lg transition-all duration-300"
-        >
-          Enviar
-        </button>
-      </form>
-    </motion.div>
+        <DialogFooter>
+          <Button type="submit">Enviar</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
 const PricingSection = () => {
+  const [contactOpen, setContactOpen] = useState(false);
+  
   const freeFeatures = [
     "Até 1 turma ativa",
     "Até 30 alunos",
@@ -121,6 +134,14 @@ const PricingSection = () => {
     "Ambiente de execução avançado",
     "Suporte prioritário",
     "Estatísticas detalhadas"
+  ];
+  
+  const customFeatures = [
+    "Solução personalizada",
+    "Integração com sistemas existentes",
+    "Treinamento dedicado",
+    "Suporte 24/7",
+    "Personalização de interface"
   ];
   
   return (
@@ -141,7 +162,7 @@ const PricingSection = () => {
           </p>
         </motion.div>
         
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <PricingCard 
             title="Free"
             price="R$0"
@@ -159,9 +180,19 @@ const PricingSection = () => {
             recommended={true}
             index={1}
           />
+          
+          <PricingCard 
+            title="Empresarial"
+            price=""
+            features={customFeatures}
+            buttonText="Entrar em contato"
+            isCustom={true}
+            onContactClick={() => setContactOpen(true)}
+            index={2}
+          />
         </div>
         
-        <ContactForm />
+        <ContactForm open={contactOpen} onOpenChange={setContactOpen} />
       </div>
     </section>
   );

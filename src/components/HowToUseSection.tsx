@@ -4,21 +4,18 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 
 const steps = [
   {
-    number: "01",
     title: "Comece Agora",
     description: "Crie sua conta gratuita e configure seu perfil de professor ou aluno.",
     image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
     position: "left"
   },
   {
-    number: "02",
     title: "Crie ou Participe",
     description: "Professores: crie turmas e exercícios. Alunos: junte-se às turmas com código de acesso.",
     image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1",
     position: "right"
   },
   {
-    number: "03",
     title: "Pratique e Avalie",
     description: "Codifique soluções para problemas e receba feedback instantâneo sobre o desempenho.",
     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
@@ -47,14 +44,11 @@ const TimelineStep = ({ step, index }: any) => {
         step.position === "right" ? "md:flex-row-reverse" : ""
       }`}
     >
-      {/* Number and text content */}
+      {/* Text content */}
       <motion.div 
         className="md:w-1/2 mb-8 md:mb-0 text-center md:text-left px-6"
         style={{ opacity, x }}
       >
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-uni-blue text-white text-xl font-bold mb-4">
-          {step.number}
-        </div>
         <h3 className="text-2xl md:text-3xl font-bold mb-4 text-uni-dark">{step.title}</h3>
         <p className="text-lg text-uni-gray">{step.description}</p>
       </motion.div>
@@ -86,7 +80,7 @@ const HowToUseSection = () => {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
   
   return (
-    <section id="how-to-use" className="bg-gradient-to-b from-blue-50 to-white py-24" ref={sectionRef}>
+    <section id="how-to-use" className="bg-white py-24" ref={sectionRef}>
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -101,12 +95,30 @@ const HowToUseSection = () => {
         </motion.div>
         
         <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200 hidden md:block">
-            <motion.div 
-              className="absolute top-0 left-0 w-full bg-uni-blue rounded-full"
-              style={{ height: lineHeight }}
-            ></motion.div>
+          {/* Zigzag timeline line */}
+          <div className="absolute left-1/2 top-0 bottom-0 transform -translate-x-1/2 hidden md:block">
+            <svg 
+              className="h-full" 
+              width="50" 
+              preserveAspectRatio="none"
+              viewBox="0 0 50 1000"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M25 0L25 250L50 500L25 750L25 1000" 
+                stroke="#3B82F6" 
+                strokeWidth="2" 
+                strokeDasharray="10 5"
+                pathLength="1"
+                strokeDashoffset="0"
+                className="transition-all duration-300"
+                style={{ 
+                  strokeDashoffset: `calc(1 - ${lineHeight.get()})`,
+                  pathLength: 1 
+                }}
+              />
+            </svg>
           </div>
           
           {/* Timeline steps */}

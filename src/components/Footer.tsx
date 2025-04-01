@@ -8,8 +8,8 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between">
           {/* Logo */}
           <div className="mb-6 md:mb-0 flex items-center">
-            <div className="bg-uni-blue rounded-md w-8 h-8 flex items-center justify-center text-white font-bold text-sm">
-              UN
+            <div className="w-8 h-8 flex items-center justify-center">
+              <img src="/logo.png" alt="UniAlgo" className="w-full h-full object-contain" />
             </div>
             <span className="ml-2 text-lg font-bold">UniAlgo</span>
           </div>
