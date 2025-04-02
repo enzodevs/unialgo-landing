@@ -123,13 +123,13 @@ const Header = () => {
                     style={{ gap: navGap }}
                   >
                     <a href="#features" className={`transition-colors text-sm ${scrolled ? 'text-white/80 hover:text-white' : 'text-uni-dark hover:text-uni-blue'}`}>
-                      Features
+                      Recursos
                     </a>
                     <a href="#how-to-use" className={`transition-colors text-sm ${scrolled ? 'text-white/80 hover:text-white' : 'text-uni-dark hover:text-uni-blue'}`}>
-                      How to Use
+                      Como usar
                     </a>
                     <a href="#pricing" className={`transition-colors text-sm ${scrolled ? 'text-white/80 hover:text-white' : 'text-uni-dark hover:text-uni-blue'}`}>
-                      Pricing
+                      Preços
                     </a>
                     <a href="#faq" className={`transition-colors text-sm ${scrolled ? 'text-white/80 hover:text-white' : 'text-uni-dark hover:text-uni-blue'}`}>
                       FAQ
@@ -229,9 +229,9 @@ const Header = () => {
                     }}
                   >
                     {[
-                      { href: "#features", label: "Features" },
-                      { href: "#how-to-use", label: "How to Use" },
-                      { href: "#pricing", label: "Pricing" },
+                      { href: "#features", label: "Recursos" },
+                      { href: "#how-to-use", label: "Como usar" },
+                      { href: "#pricing", label: "Preços" },
                       { href: "#faq", label: "FAQ" }
                     ].map((item, index) => (
                       <motion.a
