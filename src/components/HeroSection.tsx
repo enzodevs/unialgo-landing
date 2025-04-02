@@ -82,14 +82,6 @@ const HeroSection = () => {
           >
             <span className="text-uni-black relative">
               Debug
-              <motion.div 
-                className="absolute -top-8 -right-8 text-base font-normal text-uni-blue opacity-70 hidden md:block"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 0.7, y: 0 }}
-                transition={{ delay: 1.5, duration: 0.5 }}
-              >
-                // Solving problems
-              </motion.div>
             </span>
           </motion.h1>
 
@@ -136,14 +128,6 @@ const HeroSection = () => {
                 animate="blink"
               ></motion.span>
             </span>
-            <motion.div 
-              className="absolute -bottom-8 -right-8 text-base font-normal text-uni-gray opacity-70 hidden md:block"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 0.7, y: 0 }}
-              transition={{ delay: 1.7, duration: 0.5 }}
-            >
-              // Código limpo. Resultados reais.
-            </motion.div>
           </motion.h1>
 
           <motion.p 
@@ -232,14 +216,13 @@ const HeroSection = () => {
       
       {/* Code floating elements - Repositioned for better responsiveness */}
       <motion.div 
-        className="absolute bottom-10 left-10 text-xs text-gray-500 font-mono opacity-40 hidden sm:block"
+        className="absolute bottom-2 text-xs text-gray-500 font-mono opacity-40 hidden sm:block"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 0.4, y: 0 }}
         transition={{ delay: 2, duration: 1 }}
       >
-        {`function learnFaster() {`}<br />
-        {`  return "UniAlgo";`}<br />
-        {`}`}
+        {`function learnFaster() { return "UniAlgo"; }`}<br />
+
       </motion.div>
       
       <motion.div 

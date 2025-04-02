@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const DemoSection = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
 
@@ -16,11 +16,42 @@ const DemoSection = () => {
 
   const [activeFeature, setActiveFeature] = useState(1);
 
-  const handlePlayClick = () => {
-    setIsPlaying(true);
-    setLoaded(true);
-    // Poderia iniciar um vídeo real aqui
-  };
+  // Efeito para reproduzir o vídeo automaticamente quando estiver em visualização
+  useEffect(() => {
+    if (isInView && videoRef.current) {
+      // Inicia a reprodução do vídeo quando a seção estiver visível
+      videoRef.current.play().catch(error => {
+        console.log("Autoplay prevented:", error);
+        // Algumas vezes o navegador pode bloquear o autoplay, especialmente em dispositivos móveis
+        // Podemos adicionar um fallback com um botão de play se necessário
+      });
+    }
+  }, [isInView]);
+
+  // Efeito para reiniciar o vídeo quando terminar
+  useEffect(() => {
+    const video = videoRef.current;
+    
+    const handleEnded = () => {
+      if (video) {
+        // Pequeno atraso antes de reiniciar para uma transição mais suave
+        setTimeout(() => {
+          video.currentTime = 0;
+          video.play().catch(e => console.log("Replay prevented:", e));
+        }, 500);
+      }
+    };
+    
+    if (video) {
+      video.addEventListener('ended', handleEnded);
+    }
+    
+    return () => {
+      if (video) {
+        video.removeEventListener('ended', handleEnded);
+      }
+    };
+  }, []);
 
   return (
     <section id="demo" ref={sectionRef} className="py-24 bg-gradient-to-b from-white to-uni-light relative overflow-hidden">
@@ -62,135 +93,52 @@ const DemoSection = () => {
           >
             {/* Video frame with gradient overlay */}
             <div className="aspect-video bg-white rounded-xl overflow-hidden relative">
-              <div className={`absolute inset-0 bg-gradient-to-br from-uni-blue/20 to-transparent mix-blend-overlay transition-opacity duration-500 ${isPlaying ? 'opacity-30' : 'opacity-60'}`}></div>
+              {/* Gradient overlay sobre o vídeo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-uni-blue/20 to-transparent mix-blend-overlay z-10 pointer-events-none"></div>
               
-              {/* Code editor UI mockup, visible when video isn't playing */}
-              {!isPlaying && (
-                <div className="absolute inset-0 flex flex-col">
-                  <div className="h-12 bg-gray-900 flex items-center px-4">
-                    <div className="flex space-x-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <div className="mx-auto text-gray-400 text-sm font-mono">UniAlgo IDE - main.java</div>
-                  </div>
-                  <div className="flex-1 flex">
-                    <div className="w-1/6 bg-gray-800 border-r border-gray-700 p-2">
-                      <div className="text-gray-400 text-xs font-mono">EXPLORER</div>
-                      <div className="mt-2 text-gray-300 text-xs font-mono">
-                        <div className="flex items-center">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                          </svg>
-                          <span className="ml-1">src</span>
-                        </div>
-                        <div className="flex items-center ml-3 mt-1">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                          </svg>
-                          <span className="ml-1">Main.java</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex-1 bg-gray-900 p-4 font-mono text-sm">
-                      <div className="flex text-gray-400">
-                        <div className="mr-4 text-right w-6 select-none">
-                          {Array.from({ length: 10 }).map((_, i) => (
-                            <div key={i} className="leading-loose">{i + 1}</div>
-                          ))}
-                        </div>
-                        <div className="text-green-300 leading-loose">
-                          <div>public class Main {"{"}</div>
-                          <div>  public static void main(String[] args) {"{"}</div>
-                          <div>    System.out.println("Hello, UniAlgo!");</div>
-                          <div className="text-blue-300">    // Implementação do algoritmo aqui</div>
-                          <div>    int[] array = {"{"}1, 5, 3, 9, 2, 7{"}"}</div>
-                          <div>    sort(array);</div>
-                          <div>    printArray(array);</div>
-                          <div>  {"}"}</div>
-                          <div>  {"}"}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {/* Vídeo em autoplay com loop */}
+              <video 
+                ref={videoRef}
+                className="w-full h-full object-cover"
+                muted
+                playsInline
+                loop
+                preload="auto"
+                poster="/demo-poster.jpg" // Imagem de poster enquanto o vídeo carrega
+                onLoadedData={() => setLoaded(true)}
+              >
+                <source src="/demo-video.mp4" type="video/mp4" />
+                {/* Mensagem de fallback se o navegador não suportar o elemento video */}
+                Seu navegador não suporta o elemento de vídeo.
+              </video>
 
-              {/* Placeholder image or video */}
-              {!loaded && !isPlaying && (
-                <img 
-                  src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" 
-                  alt="UniAlgo Demo" 
-                  className="w-full h-full object-cover opacity-40"
-                />
-              )}
-
-              {/* Play button overlay */}
-              {!isPlaying && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div 
-                    className="w-20 h-20 rounded-full bg-uni-blue/90 flex items-center justify-center cursor-pointer hover:bg-uni-blue transition-colors shadow-lg"
-                    onClick={handlePlayClick}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      width="32" 
-                      height="32" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      className="text-white ml-1"
-                    >
-                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                  </motion.div>
-                </div>
-              )}
-
-              {/* Video player (would be an actual video in production) */}
-              {isPlaying && (
-                <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                  <div className="text-white text-lg">
-                    Vídeo em reprodução...
-                    <div className="mt-4 h-1.5 w-full max-w-md bg-gray-700 rounded-full overflow-hidden">
-                      <motion.div 
-                        className="h-full bg-uni-blue"
-                        initial={{ width: "0%" }}
-                        animate={{ width: "100%" }}
-                        transition={{ duration: 30, ease: "linear" }}
-                      />
-                    </div>
-                  </div>
+              {/* Fallback de conteúdo enquanto o vídeo não carrega */}
+              {!loaded && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 bg-opacity-80">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-uni-blue mb-4"></div>
+                  <p className="text-uni-dark">Carregando demonstração...</p>
                 </div>
               )}
 
               {/* Feature indicator - animated pulse on the interface */}
-              {!isPlaying && (
-                <motion.div
-                  className={`absolute w-12 h-12 rounded-full bg-uni-blue/30 flex items-center justify-center`}
-                  style={{ 
-                    top: activeFeature === 1 ? '20%' : activeFeature === 2 ? '50%' : '70%',
-                    left: activeFeature === 1 ? '80%' : activeFeature === 2 ? '30%' : '60%' 
-                  }}
-                  animate={{ 
-                    scale: [1, 1.5, 1],
-                    opacity: [0.7, 0.3, 0.7]
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "loop"
-                  }}
-                >
-                  <div className="w-4 h-4 rounded-full bg-uni-blue"></div>
-                </motion.div>
-              )}
+              <motion.div
+                className={`absolute w-12 h-12 rounded-full bg-uni-blue/30 flex items-center justify-center z-20 pointer-events-none`}
+                style={{ 
+                  top: activeFeature === 1 ? '20%' : activeFeature === 2 ? '50%' : '70%',
+                  left: activeFeature === 1 ? '80%' : activeFeature === 2 ? '30%' : '60%' 
+                }}
+                animate={{ 
+                  scale: [1, 1.5, 1],
+                  opacity: [0.7, 0.3, 0.7]
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: "loop"
+                }}
+              >
+                <div className="w-4 h-4 rounded-full bg-uni-blue"></div>
+              </motion.div>
             </div>
           </motion.div>
 

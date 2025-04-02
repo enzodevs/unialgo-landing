@@ -28,7 +28,7 @@ const faqCategories: FaqCategory[] = [
     name: "Geral",
     description: "Perguntas sobre a plataforma e funcionalidades",
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
         <line x1="12" y1="17" x2="12.01" y2="17"></line>
@@ -40,7 +40,7 @@ const faqCategories: FaqCategory[] = [
     name: "Técnico",
     description: "Questões sobre linguagens, execução e configurações",
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="16 18 22 12 16 6"></polyline>
         <polyline points="8 6 2 12 8 18"></polyline>
       </svg>
@@ -51,7 +51,7 @@ const faqCategories: FaqCategory[] = [
     name: "Professores",
     description: "Informações específicas para educadores",
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
       </svg>
@@ -62,7 +62,7 @@ const faqCategories: FaqCategory[] = [
     name: "Estudantes",
     description: "Dúvidas comuns dos alunos",
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
         <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
       </svg>
@@ -92,7 +92,7 @@ const faqs: FaqItem[] = [
   // Categoria: Técnico
   {
     question: "Quais linguagens de programação são suportadas?",
-    answer: "O UniAlgo suporta mais de 60 linguagens de programação. Cada ambiente é configurado com bibliotecas e frameworks populares para cada linguagem.",
+    answer: "A UniAlgo tem suporte para mais de 60 linguagens de programação. Cada ambiente é configurado com bibliotecas e frameworks populares para cada linguagem.",
     category: "tecnico"
   },
   {
@@ -168,6 +168,32 @@ const FaqSection = () => {
     );
   };
 
+  // Componente de categoria com ícone centralizdo e melhorado
+  const CategoryButton = ({ category, isActive, onClick }: { 
+    category: FaqCategory, 
+    isActive: boolean,
+    onClick: () => void
+  }) => (
+    <motion.button
+      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+        isActive 
+          ? 'bg-uni-blue text-white shadow-md' 
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+      }`}
+      onClick={onClick}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <div className="flex items-center justify-center gap-2">
+        {/* Container para o ícone garante alinhamento adequado */}
+        <div className="flex items-center justify-center w-5 h-5">
+          {category.icon}
+        </div>
+        <span>{category.name}</span>
+      </div>
+    </motion.button>
+  );
+
   return (
     <section id="faq" ref={sectionRef} className="bg-white py-24 relative overflow-hidden">
       {/* Background pattern */}
@@ -233,37 +259,33 @@ const FaqSection = () => {
           </div>
         </motion.div>
 
-        {/* Navegação por categorias */}
+        {/* Navegação por categorias - melhorado para alinhamento e responsividade */}
         <motion.div 
-          className="flex flex-wrap justify-center gap-2 mb-8"
+          className="flex flex-wrap justify-center gap-3 mb-8"
           initial={{ opacity: 0, y: 10 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <button
+          <motion.button
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
               activeCategory === "all" 
                 ? 'bg-uni-blue text-white shadow-md' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
             onClick={() => setActiveCategory("all")}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
           >
-            Todas as categorias
-          </button>
+            <span>Todas as categorias</span>
+          </motion.button>
           
           {faqCategories.map(category => (
-            <button
+            <CategoryButton 
               key={category.id}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-                activeCategory === category.id 
-                  ? 'bg-uni-blue text-white shadow-md' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              category={category}
+              isActive={activeCategory === category.id}
               onClick={() => setActiveCategory(category.id)}
-            >
-              <span className="w-4 h-4">{category.icon}</span>
-              <span>{category.name}</span>
-            </button>
+            />
           ))}
         </motion.div>
 

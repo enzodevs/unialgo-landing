@@ -184,7 +184,7 @@ const Footer = () => {
             <div className="md:col-span-2">
               <a href="/" className="flex items-center gap-2 mb-6">
                 <div className="w-10 h-10 flex items-center justify-center">
-                  <img src="/logo.png" alt="UniAlgo" className="w-full h-full object-contain" />
+                  <img src="/logo.png" alt="UniAlgo" className="w-full h-full object-contain rounded-lg" />
                 </div>
                 <span className="text-xl font-bold">UniAlgo</span>
               </a>

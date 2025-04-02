@@ -7,28 +7,28 @@ const features = [
     icon: Clock,
     title: "Feedback Instantâneo",
     description: "Execute e avalie código em tempo real, eliminando a espera por correções manuais e acelerando o ciclo de aprendizado.",
-    image: "/feedback.jpg",
+    image: "https://placehold.co/800x600",
     color: "#3B82F6" // Blue
   },
   {
     icon: Shield,
     title: "Ambientes Isolados",
     description: "Códigos executados em containers isolados, garantindo segurança e consistência para todas as submissões dos alunos.",
-    image: "/security.jpg",
+    image: "https://placehold.co/800x600",
     color: "#10B981" // Green
   },
   {
     icon: Folder,
     title: "Listas e Turmas",
     description: "Crie e gerencie listas de exercícios e turmas facilmente, com interface intuitiva de arrastar e soltar para organizar conteúdo.",
-    image: "/organize.jpg",
+    image: "https://placehold.co/800x600",
     color: "#8B5CF6" // Purple
   },
   {
     icon: Lightbulb,
     title: "Foco no Aprendizado",
     description: "Interface projetada para manter os alunos engajados e facilitar o acompanhamento do progresso individual por parte dos professores.",
-    image: "/learning.jpg",
+    image: "https://placehold.co/800x600",
     color: "#F59E0B" // Amber
   }
 ];
