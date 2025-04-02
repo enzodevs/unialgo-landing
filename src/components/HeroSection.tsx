@@ -44,19 +44,7 @@ const HeroSection = () => {
         animate="show"
         className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative"
       >
-        {/* Subtle floating shape behind text */}
-        <motion.div 
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10 -z-10 blur-3xl"
-          whileInView={{
-            y: [0, -10, 0]
-          }}
-          transition={{
-            duration: 4,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "reverse" as const
-          }}
-        ></motion.div>
+
 
         <motion.div
           className="relative"
